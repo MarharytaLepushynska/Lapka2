@@ -18,6 +18,8 @@ package org.example;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 // Item.setGroup
 // Item.getPrice -> double
 // Item.toEquals -> boolean
@@ -90,7 +92,18 @@ class Item{
         this.groupOfItems = groupOfItems;
     }
 
+    //чи точно треба, якщо в нас унікальна назва, тобто однакових товарів немає
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return amount == item.amount && Double.compare(price, item.price) == 0 && Objects.equals(name, item.name) && Objects.equals(description, item.description) && Objects.equals(producer, item.producer) && Objects.equals(groupOfItems, item.groupOfItems);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, description, producer, amount, price, groupOfItems);
+    }
 }
 
 @Setter
