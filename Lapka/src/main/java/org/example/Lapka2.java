@@ -23,6 +23,8 @@ import java.util.Objects;
 // Item.setGroup
 // Item.getPrice -> double
 // Item.toEquals -> boolean
+@Setter
+@Getter
 class Item{
     private String name;
     private String description;
@@ -41,55 +43,6 @@ class Item{
 
     public String toString() {
         return name+" description: "+description+" producer: "+producer +" amount in stock: "+amount+" price: "+price+" belongs to: "+groupOfItems;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-    /* не впевнена поки, що цей метод буемо використовувати
-    public String getDescription() {
-        return description;
-    }*/
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /*теж не впевнена, чи точно треба
-    public String getProducer() {
-        return producer;
-    }*/
-
-    public void setProducer(String producer) {
-        this.producer = producer;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getGroupOfItems() {
-        return groupOfItems;
-    }
-
-    public void setGroupOfItems(String groupOfItems) {
-        this.groupOfItems = groupOfItems;
     }
 
     //чи точно треба, якщо в нас унікальна назва, тобто однакових товарів немає
