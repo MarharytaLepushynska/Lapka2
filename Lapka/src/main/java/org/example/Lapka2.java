@@ -45,6 +45,10 @@ class Item{
         return name+" description: "+description+" producer: "+producer +" amount in stock: "+amount+" price: "+price+" belongs to: "+groupOfItems;
     }
 
+    public double getTotalPrice() {
+        return amount * price;
+    }
+
     //чи точно треба, якщо в нас унікальна назва, тобто однакових товарів немає
     @Override
     public boolean equals(Object o) {
