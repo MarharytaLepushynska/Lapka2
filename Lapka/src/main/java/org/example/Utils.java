@@ -18,14 +18,5 @@ class Utils {
         }
         return -1;
     }
-    // feels like a terrible code...
-    public static Object [] appendEntity (Object [] entities, Object entity, Class entityClass) {
-        Object[] newEntities = Arrays.copyOf(entities, entities.length + 1);
-        for (int i = 0; i < entities.length; i++) {
-            newEntities[i] = entityClass.cast(entities[i]);
-        }
-        newEntities[entities.length] = entity;
-        return newEntities;
-    }
 
 }
