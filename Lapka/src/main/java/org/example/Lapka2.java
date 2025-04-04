@@ -81,7 +81,7 @@ class GroupOfItems {
 
     public void setGroupForItems(String groupName) {
         for (Item item : items) {
-//            item.setGroup();
+            item.setGroupOfItems(groupName);
         }
     }
 // принтити в консоль взагалі щось треба?
@@ -94,7 +94,7 @@ class GroupOfItems {
     public double priceForItems() {
         double price = 0;
         for (Item item : items) {
-//            price += item.getPrice();
+            price += item.getTotalPrice();
         }
         return price;
     }
@@ -112,13 +112,26 @@ class GroupOfItems {
         if (index == -1) {
             return;
         }
-
+        items = popItem(index).clone();
     }
 
     public void addItem(Item item) {
-
+        items = appendItem(items, item).clone();
     }
-//    private
+
+    private Item [] appendItem(Item [] items, Item item) {
+        Item [] newItems = new Item[items.length + 1];
+        System.arraycopy(items, 0, newItems, 0, items.length);
+        newItems[items.length] = item;
+        return newItems;
+    }
+
+    private Item [] popItem(int index) {
+        Item [] newItems = new Item[items.length - 1];
+        System.arraycopy(items, 0, newItems, 0, index);
+        System.arraycopy(items, index + 1, newItems, index, items.length - index - 1);
+        return newItems;
+    }
 
 }
 
