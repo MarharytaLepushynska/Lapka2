@@ -118,7 +118,7 @@ class GroupOfItems {
     }
 
     public void addItem(Item item) {
-        items = appendItem(items, item).clone();
+        items = appendItem(item).clone();
     }
 
     public int findItem(String name) {
@@ -130,7 +130,7 @@ class GroupOfItems {
         return -1;
     }
 
-    private Item [] appendItem(Item [] items, Item item) {
+    private Item [] appendItem(Item item) {
         Item [] newItems = new Item[items.length + 1];
         System.arraycopy(items, 0, newItems, 0, items.length);
         newItems[items.length] = item;
@@ -156,7 +156,51 @@ class Storage {
         this.name = name;
     }
 
+    public void editGroup(String groupName, String newGroupName) {
+        int indexOfItem = findGroup(groupName);
+        if (indexOfItem == -1) {
+            return;
+        }
+        int index = Utils.getIndexOfEntity(groups, groups[indexOfItem]);
+        groups[index].setName(newGroupName);
+        groups[index].setGroupForItems(newGroupName);
+    }
 
+    public void addGroup(GroupOfItems newGroup) {
+        groups = appendGroupOfItem(newGroup).clone();
+    }
+
+    public void removeGroup(String groupName) {
+        int indexOfGroup = findGroup(groupName);
+        if (indexOfGroup == -1) {
+            return;
+        }
+        int index = Utils.getIndexOfEntity(groups, groups[indexOfGroup]);
+        groups = popGroupOfItem(index).clone();
+    }
+
+    private GroupOfItems[] popGroupOfItem(int index) {
+        GroupOfItems [] newGroupOfItems = new GroupOfItems[groups.length - 1];
+        System.arraycopy(groups, 0, newGroupOfItems, 0, index);
+        System.arraycopy(groups, index + 1, newGroupOfItems, index, groups.length - index - 1);
+        return newGroupOfItems;
+    }
+
+    public int findGroup(String groupName) {
+        for (int i = 0 ; i < groups.length; i++) {
+            if (groups[i].getName().equals(groupName)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private GroupOfItems [] appendGroupOfItem(GroupOfItems group) {
+        GroupOfItems [] newGroups = new GroupOfItems[groups.length + 1];
+        System.arraycopy(groups, 0, newGroups, 0, groups.length);
+        newGroups[groups.length] = group;
+        return newGroups;
+    }
 }
 
 public class Lapka2 {
