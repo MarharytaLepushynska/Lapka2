@@ -99,19 +99,21 @@ class GroupOfItems {
         return price;
     }
 
-    public void editItem(Item item) {
-        int index = Utils.getIndexOfEntity(items, item);
-        if (index == -1) {
+    public void editItem(String itemName, Item item) {
+        int indexOfItem = findItem(itemName);
+        if (indexOfItem == -1) {
             return;
         }
+        int index = Utils.getIndexOfEntity(items, items[indexOfItem]);
         items[index] = item;
     }
 
-    public void removeItem(Item item) {
-        int index = Utils.getIndexOfEntity(items, item);
-        if (index == -1) {
+    public void removeItem(String itemName) {
+        int indexOfItem = findItem(itemName);
+        if (indexOfItem == -1) {
             return;
         }
+        int index = Utils.getIndexOfEntity(items, items[indexOfItem]);
         items = popItem(index).clone();
     }
 
@@ -144,6 +146,18 @@ class GroupOfItems {
 
 }
 
+@Getter
+@Setter
+class Storage {
+    private GroupOfItems[] groups;
+    private String name;
+    Storage(String name, GroupOfItems[] groups) {
+        this.groups = groups;
+        this.name = name;
+    }
+
+
+}
 
 public class Lapka2 {
     //comment try
