@@ -119,6 +119,15 @@ class GroupOfItems {
         items = appendItem(items, item).clone();
     }
 
+    public int findItem(String name) {
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].getName().equals(name)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private Item [] appendItem(Item [] items, Item item) {
         Item [] newItems = new Item[items.length + 1];
         System.arraycopy(items, 0, newItems, 0, items.length);
