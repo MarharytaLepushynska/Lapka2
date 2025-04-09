@@ -20,9 +20,7 @@ import lombok.Setter;
 
 import java.util.Objects;
 
-// Item.setGroup
-// Item.getPrice -> double
-// Item.toEquals -> boolean
+// add amount and delete items
 @Setter
 @Getter
 class Item{
@@ -69,9 +67,11 @@ class GroupOfItems {
     private Item[] items;
     private String name;
     private String description;
+//    delete array of items
     GroupOfItems(Item [] items, String name, String description) {
         this.items = items;
         this.name = name;
+//        this.items= FileData.getAllItemsForGroup(name);
         this.description = description;
     }
 
@@ -85,11 +85,15 @@ class GroupOfItems {
         }
     }
 // принтити в консоль взагалі щось треба?
-//    public void getInfoAboutItems() {
-//        for (Item item : items) {
-//            System.out.println(item);
-//        }
-//    }
+    public void getInfoAboutItems() {
+        if (items.length == 0) {
+            System.out.println("No items found");
+            return;
+        }
+        for (Item item : items) {
+            System.out.println(item);
+        }
+    }
 
     public double priceForItems() {
         double price = 0;
@@ -102,6 +106,7 @@ class GroupOfItems {
     public void editItem(String itemName, Item item) {
         int indexOfItem = findItem(itemName);
         if (indexOfItem == -1) {
+            System.out.println("Item " + itemName + " not found");
             return;
         }
         int index = Utils.getIndexOfEntity(items, items[indexOfItem]);
@@ -111,6 +116,7 @@ class GroupOfItems {
     public void removeItem(String itemName) {
         int indexOfItem = findItem(itemName);
         if (indexOfItem == -1) {
+            System.out.println("Item " + itemName + " not found");
             return;
         }
         int index = Utils.getIndexOfEntity(items, items[indexOfItem]);
@@ -145,20 +151,48 @@ class GroupOfItems {
     }
 
 }
+/* class FileData {
+   Item [] items;
+   private String getAllInfo() -> весь файл
+   public Item [] getAllItemsForGroup(String groupName) -> масив айтемів заданої групи ->
+   { String allInfo = getAllInfo(), String [] itemsJSON =  allInfo.split(" \n"), -> json["groupName"] == groupName }
 
+   public String [] getAllUniqueGroupName -> повертає масив об єктів груп
+}*/
 @Getter
 @Setter
 class Storage {
     private GroupOfItems[] groups;
     private String name;
+    // не треба приймати масив груп
     Storage(String name, GroupOfItems[] groups) {
-        this.groups = groups;
+
         this.name = name;
+        this.groups = groups;
+//        this.groups = FileData.getAllItemsForGroup()
+    }
+
+    public double getTotalPrice() {
+        double totalPrice = 0;
+        for (GroupOfItems group : groups) {
+            totalPrice += group.priceForItems();
+        }
+        return totalPrice;
+    }
+
+    public void getAllInfoAboutStorage(){
+        if (groups.length == 0) {
+            System.out.println("No groups found");
+        }
+        for (GroupOfItems group : groups) {
+            group.getInfoAboutItems();
+        }
     }
 
     public void editGroup(String groupName, String newGroupName) {
         int indexOfItem = findGroup(groupName);
         if (indexOfItem == -1) {
+            System.out.println("Group " + groupName + " not found");
             return;
         }
         int index = Utils.getIndexOfEntity(groups, groups[indexOfItem]);
@@ -173,6 +207,7 @@ class Storage {
     public void removeGroup(String groupName) {
         int indexOfGroup = findGroup(groupName);
         if (indexOfGroup == -1) {
+            System.out.println("Group " + groupName + " not found");
             return;
         }
         int index = Utils.getIndexOfEntity(groups, groups[indexOfGroup]);
@@ -204,5 +239,61 @@ class Storage {
 }
 
 public class Lapka2 {
-    //comment try
+    public static void main(String [] args) {
+//        Item[] items = new Item[3];
+//        items[0] = new Item("Product0", "", "Roshen", 1, 20, "Name");
+//        items[1] = new Item("Product1", "", "Roshen", 1, 20, "Name");
+//        items[2] = new Item("Product2", "", "Roshen", 1, 20, "Name");
+//        GroupOfItems groupOfItems = new GroupOfItems(items, "Name", "Description");
+//        Item [] items1 = new Item[2];
+//        items1[0] = new Item("Grechka", "", "Svoya Liniya", 19, 50, "Grechka@Food");
+//        items1[1] = new Item("Pomidor\uD83C\uDF45", "", "Ukrainian farmers", 5, 150, "Grechka@Food");
+//        GroupOfItems groupOfItems1 = new GroupOfItems(items1, "Grechka@Food", "Grechka@Food@Description");
+//        Storage storage = new Storage("Grechka Storage", new GroupOfItems[]{groupOfItems, groupOfItems1});
+//        storage.editGroup("groupOfItems", "Grechka");
+//        storage.editGroup("Name", "Pomidor\uD83C\uDF45");
+//        storage.getAllInfoAboutStorage();
+//        storage.removeGroup("groupOfItems");
+////        storage.removeGroup("Pomidor\uD83C\uDF45");
+//        System.out.println("AFTER DELETE");
+//        storage.addGroup(new GroupOfItems(new Item[]{new Item("\uD83C\uDF46", "", "Ukrainian \uD83C\uDF46", 10, 100, "\uD83C\uDF46 group")}, "\uD83C\uDF46 group", ""));
+//        storage.getAllInfoAboutStorage();
+//        storage.removeGroup("groupOfItems");
+//        storage.editGroup("Pomidor\uD83C\uDF45", "Ukrainian \uD83C\uDF45");
+//        System.out.println("AFTER EDIT");
+//        storage.getAllInfoAboutStorage();
+//        System.out.println("total price: " + storage.getTotalPrice());
+//        groupOfItems.getInfoAboutItems();
+//        groupOfItems.removeItem("Product0");
+//        groupOfItems.getInfoAboutItems();
+//        groupOfItems.getInfoAboutItems();
+//        groupOfItems.addItem(new Item("Product0", "", "Roshen", 1, 20, "Name"));
+//        groupOfItems.getInfoAboutItems();
+//        groupOfItems.removeItem("Product0");
+//        groupOfItems.removeItem("Product1");
+//        groupOfItems.removeItem("Product2");
+//        groupOfItems.removeItem("Product3");
+//        groupOfItems.removeItem("Product0");
+//        groupOfItems.removeItem("Product2");
+//        groupOfItems.removeItem("Product3");
+//        groupOfItems.removeItem("Product0");
+//
+//        System.out.println("AFTER DELETE");
+//        groupOfItems.getInfoAboutItems();
+//        groupOfItems.removeItem("Product0");
+//        groupOfItems.removeItem("Producfsdfd");
+//        System.out.println("AFTER DELETEx2");
+//        groupOfItems.getInfoAboutItems();
+//        groupOfItems.addItem(new Item("Grechka", "For GOATs",
+//                "Nasha Liniya", 100, 25, "Crops"));
+//        groupOfItems.editItem("Grechka", new Item("Grechka", "For GOATs",
+//                "Nasha Liniya", 100, 35, "Crops"));
+//        System.out.println("AFTER EDIT");
+//        groupOfItems.getInfoAboutItems();
+//        groupOfItems.removeItem("Grechka1");
+//        groupOfItems.removeItem("Grechka");
+//        System.out.println("AFTER DELETE");
+//        groupOfItems.getInfoAboutItems();
+    }
+
 }
