@@ -15,14 +15,19 @@
 
 package org.example;
 
-import lombok.Getter;
-import lombok.Setter;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.*;
+import java.io.*;
 import java.util.Objects;
+import java.util.Scanner;
 
 // add amount and delete items
 @Setter
 @Getter
+@NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 class Item{
     private String name;
     private String description;
@@ -150,6 +155,91 @@ class GroupOfItems {
         return newItems;
     }
 
+}
+
+class FileData {
+    static File file = new File("data.txt");
+    static BufferedWriter bw;
+
+    static {
+        try {
+            bw = new BufferedWriter(new FileWriter(file));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        addItem(new Item("Grechka", "", "Svoya Liniya", 19, 50, "Grechka@Food"));
+        addItem(new Item("Grechka2", "", "Svoya Liniya", 19, 50, "Grechka@Food"));
+        addItem(new Item("Grechka3", "", "Svoya Liniya", 19, 50, "Grechka@FoodFOOD"));
+        changeItemGroup("Grechka@Food", "GrechkaGrechkaGrechka");
+        changeItemGroup("GrechkaGrechkaGrechka1", "GrechkaGrechkaGrechka2");
+        changeItemGroup("GrechkaGrechkaGrechka", "Grechka");
+        deleteItem("Grechka");
+    }
+
+    public static void addItem(Item item) throws IOException {
+        String json = new ObjectMapper().writeValueAsString(item);
+        bw.write(json);
+        bw.newLine();
+        bw.flush();
+    }
+
+    public static void editItem(String itemName, Item newItem) throws IOException {
+        String fileContent = "";
+        Scanner localScanner = new Scanner(file);
+        while (localScanner.hasNextLine()) {
+            Item item = getItemFromJSON(localScanner.nextLine());
+            if (item.getName().equals(itemName)) {
+                item = newItem;
+            }
+            String json = new ObjectMapper().writeValueAsString(item);
+            fileContent += json + "\n";
+        }
+        rewriteFileContent(fileContent);
+    }
+
+    public static void deleteItem(String itemName) throws IOException {
+        String fileContent = "";
+        Scanner localScanner = new Scanner(file);
+        while (localScanner.hasNextLine()) {
+            Item item = getItemFromJSON(localScanner.nextLine());
+            if (item.getName().equals(itemName)) {
+                continue;
+            }
+            String json = new ObjectMapper().writeValueAsString(item);
+            fileContent += json + "\n";
+        }
+        rewriteFileContent(fileContent);
+    }
+
+    public static void changeItemGroup(String itemGroup, String newGroupName) throws IOException {
+        String fileContent = "";
+        Scanner localScanner = new Scanner(file);
+        while (localScanner.hasNextLine()) {
+            Item item = getItemFromJSON(localScanner.nextLine());
+            if (item.getGroupOfItems().equals(itemGroup)) {
+                item.setGroupOfItems(newGroupName);
+            }
+            String json = new ObjectMapper().writeValueAsString(item);
+            fileContent += json + "\n";
+        }
+        rewriteFileContent(fileContent);
+    }
+
+
+    private static Item getItemFromJSON(String itemJson) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Item item = mapper.readValue(itemJson, Item.class);
+        return item;
+    }
+
+    private static void rewriteFileContent(String fileContent) throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream(file, false);
+        fileOutputStream.write(fileContent.getBytes());
+        fileOutputStream.close();
+    }
 }
 /* class FileData {
    Item [] items;

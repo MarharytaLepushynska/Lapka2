@@ -1,2 +1,2 @@
-{}
-{}
+{"name":"Grechka2","description":"","producer":"Svoya Liniya","amount":19,"price":50.0,"groupOfItems":"Grechka","totalPrice":950.0}
+{"name":"Grechka3","description":"","producer":"Svoya Liniya","amount":19,"price":50.0,"groupOfItems":"Grechka@FoodFOOD","totalPrice":950.0}
