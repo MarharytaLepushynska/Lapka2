@@ -73,22 +73,37 @@ class GroupOfItems {
     private String name;
     private String description;
 //    delete array of items
-    GroupOfItems(Item [] items, String name, String description) {
-        this.items = items;
+    GroupOfItems(String name, String description) {
+        this.items = new Item[]{};
         this.name = name;
 //        this.items= FileData.getAllItemsForGroup(name);
         this.description = description;
+    }
+
+    public void setItems(Item[] items) throws IOException {
+        this.items = items;
+        for (Item item : items) {
+            FileData.addItem(item);
+        }
     }
 
     public String toString(){
         return "This group of " + name + " has " + items.length + " items";
     }
 
-    public void setGroupForItems(String groupName) {
+    public void setGroupForItems(String groupName) throws IOException {
         for (Item item : items) {
+            FileData.changeItemGroup(item.getGroupOfItems(), groupName);
             item.setGroupOfItems(groupName);
         }
     }
+
+    public void removeGroup() throws IOException {
+        for (Item item : items) {
+            FileData.deleteItem(item.getName());
+        }
+    }
+
 // принтити в консоль взагалі щось треба?
     public void getInfoAboutItems() {
         if (items.length == 0) {
@@ -108,28 +123,31 @@ class GroupOfItems {
         return price;
     }
 
-    public void editItem(String itemName, Item item) {
+    public void editItem(String itemName, Item item) throws IOException {
         int indexOfItem = findItem(itemName);
         if (indexOfItem == -1) {
             System.out.println("Item " + itemName + " not found");
             return;
         }
         int index = Utils.getIndexOfEntity(items, items[indexOfItem]);
+        FileData.editItem(items[index].getName(), item);
         items[index] = item;
     }
 
-    public void removeItem(String itemName) {
+    public void removeItem(String itemName) throws IOException {
         int indexOfItem = findItem(itemName);
         if (indexOfItem == -1) {
             System.out.println("Item " + itemName + " not found");
             return;
         }
         int index = Utils.getIndexOfEntity(items, items[indexOfItem]);
+        FileData.deleteItem(items[index].getName());
         items = popItem(index).clone();
     }
 
-    public void addItem(Item item) {
+    public void addItem(Item item) throws IOException {
         items = appendItem(item).clone();
+        FileData.addItem(item);
     }
 
     public int findItem(String name) {
@@ -169,15 +187,15 @@ class FileData {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        addItem(new Item("Grechka", "", "Svoya Liniya", 19, 50, "Grechka@Food"));
-        addItem(new Item("Grechka2", "", "Svoya Liniya", 19, 50, "Grechka@Food"));
-        addItem(new Item("Grechka3", "", "Svoya Liniya", 19, 50, "Grechka@FoodFOOD"));
-        changeItemGroup("Grechka@Food", "GrechkaGrechkaGrechka");
-        changeItemGroup("GrechkaGrechkaGrechka1", "GrechkaGrechkaGrechka2");
-        changeItemGroup("GrechkaGrechkaGrechka", "Grechka");
-        deleteItem("Grechka");
-    }
+//    public static void main(String[] args) throws IOException {
+//        addItem(new Item("Grechka", "", "Svoya Liniya", 19, 50, "Grechka@Food"));
+//        addItem(new Item("Grechka2", "", "Svoya Liniya", 19, 50, "Grechka@Food"));
+//        addItem(new Item("Grechka3", "", "Svoya Liniya", 19, 50, "Grechka@FoodFOOD"));
+//        changeItemGroup("Grechka@Food", "GrechkaGrechkaGrechka");
+//        changeItemGroup("GrechkaGrechkaGrechka1", "GrechkaGrechkaGrechka2");
+//        changeItemGroup("GrechkaGrechkaGrechka", "Grechka");
+//        deleteItem("Grechka");
+//    }
 
     public static void addItem(Item item) throws IOException {
         String json = new ObjectMapper().writeValueAsString(item);
@@ -255,10 +273,10 @@ class Storage {
     private GroupOfItems[] groups;
     private String name;
     // не треба приймати масив груп
-    Storage(String name, GroupOfItems[] groups) {
+    Storage(String name) {
 
         this.name = name;
-        this.groups = groups;
+        this.groups = new GroupOfItems[]{};
 //        this.groups = FileData.getAllItemsForGroup()
     }
 
@@ -279,28 +297,30 @@ class Storage {
         }
     }
 
-    public void editGroup(String groupName, String newGroupName) {
+    public void editGroup(String groupName, String newGroupName) throws IOException {
         int indexOfItem = findGroup(groupName);
         if (indexOfItem == -1) {
             System.out.println("Group " + groupName + " not found");
             return;
         }
         int index = Utils.getIndexOfEntity(groups, groups[indexOfItem]);
-        groups[index].setName(newGroupName);
         groups[index].setGroupForItems(newGroupName);
+        groups[index].setName(newGroupName);
+
     }
 
     public void addGroup(GroupOfItems newGroup) {
         groups = appendGroupOfItem(newGroup).clone();
     }
 
-    public void removeGroup(String groupName) {
+    public void removeGroup(String groupName) throws IOException {
         int indexOfGroup = findGroup(groupName);
         if (indexOfGroup == -1) {
             System.out.println("Group " + groupName + " not found");
             return;
         }
         int index = Utils.getIndexOfEntity(groups, groups[indexOfGroup]);
+        groups[index].removeGroup();
         groups = popGroupOfItem(index).clone();
     }
 
@@ -329,25 +349,38 @@ class Storage {
 }
 
 public class Lapka2 {
-    public static void main(String [] args) {
-//        Item[] items = new Item[3];
-//        items[0] = new Item("Product0", "", "Roshen", 1, 20, "Name");
-//        items[1] = new Item("Product1", "", "Roshen", 1, 20, "Name");
-//        items[2] = new Item("Product2", "", "Roshen", 1, 20, "Name");
-//        GroupOfItems groupOfItems = new GroupOfItems(items, "Name", "Description");
-//        Item [] items1 = new Item[2];
-//        items1[0] = new Item("Grechka", "", "Svoya Liniya", 19, 50, "Grechka@Food");
-//        items1[1] = new Item("Pomidor\uD83C\uDF45", "", "Ukrainian farmers", 5, 150, "Grechka@Food");
-//        GroupOfItems groupOfItems1 = new GroupOfItems(items1, "Grechka@Food", "Grechka@Food@Description");
-//        Storage storage = new Storage("Grechka Storage", new GroupOfItems[]{groupOfItems, groupOfItems1});
+    public static void main(String [] args) throws IOException {
+        Item[] items = new Item[3];
+        items[0] = new Item("Product0", "", "Roshen", 1, 20, "Name");
+        items[1] = new Item("Product1", "", "Roshen", 1, 20, "Name");
+        items[2] = new Item("Product2", "", "Roshen", 1, 20, "Name");
+        GroupOfItems groupOfItems = new GroupOfItems("Name", "Description");
+        groupOfItems.addItem(items[0]);
+        groupOfItems.addItem(items[1]);
+        groupOfItems.addItem(items[2]);
+//        FileData.
+        Item [] items1 = new Item[2];
+        items1[0] = new Item("Grechka", "", "Svoya Liniya", 19, 50, "Grechka@Food");
+        items1[1] = new Item("Pomidor\uD83C\uDF45", "", "Ukrainian farmers", 5, 150, "Grechka@Food");
+        GroupOfItems groupOfItems1 = new GroupOfItems("Grechka@Food", "Grechka@Food");
+        groupOfItems1.addItem(items1[0]);
+        groupOfItems1.addItem(items1[1]);
+        Storage storage = new Storage("Grechka Storage");
+        storage.addGroup(groupOfItems);
+        storage.addGroup(groupOfItems1);
+        storage.editGroup("Name", "Baklazhan");
+        storage.editGroup("Baklazhan", "BaklazhanBaklazhan");
+        groupOfItems.editItem("", null);
+        groupOfItems1.editItem("Grechka", new Item("GrechkaGrechk1123a", "", "Svoya Liniya", 19, 50, "Grechka@Food"));
+        storage.removeGroup("BaklazhanBaklazhan");
 //        storage.editGroup("groupOfItems", "Grechka");
 //        storage.editGroup("Name", "Pomidor\uD83C\uDF45");
 //        storage.getAllInfoAboutStorage();
 //        storage.removeGroup("groupOfItems");
-////        storage.removeGroup("Pomidor\uD83C\uDF45");
-//        System.out.println("AFTER DELETE");
+//        storage.removeGroup("Pomidor\uD83C\uDF45");
+         System.out.println("AFTER DELETE");
 //        storage.addGroup(new GroupOfItems(new Item[]{new Item("\uD83C\uDF46", "", "Ukrainian \uD83C\uDF46", 10, 100, "\uD83C\uDF46 group")}, "\uD83C\uDF46 group", ""));
-//        storage.getAllInfoAboutStorage();
+        storage.getAllInfoAboutStorage();
 //        storage.removeGroup("groupOfItems");
 //        storage.editGroup("Pomidor\uD83C\uDF45", "Ukrainian \uD83C\uDF45");
 //        System.out.println("AFTER EDIT");
