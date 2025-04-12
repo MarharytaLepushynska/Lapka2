@@ -44,6 +44,19 @@ class Item{
         this.groupOfItems = groupOfItems;
     }
 
+    public void increaseAmount(int number) {
+        amount += number;
+    }
+
+    //щоб потім можна було сповістити користувача про помилку
+    public boolean decreaseAmount(int number) {
+        if (amount > number) {
+            amount -= number;
+            return true;
+        }
+        return false;
+    }
+
     public String toString() {
         return name+" description: "+description+" producer: "+producer +" amount in stock: "+amount+" price: "+price+" belongs to: "+groupOfItems;
     }
