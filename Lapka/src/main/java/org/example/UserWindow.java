@@ -359,7 +359,7 @@ public class UserWindow extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         for(int i=0; i<stor.groups.length; i++){
-            JLabel lbl = new JLabel(String.format("%s: %.2f", stor.groups[i].getName(), stor.groups[i].priceForItems()));
+            JLabel lbl = new JLabel(String.format("%s: %.2f грн", stor.groups[i].getName(), stor.groups[i].priceForItems()));
             lbl.setFont(new Font("Verdana", Font.PLAIN, 20));
             panel.add(lbl);
         }
