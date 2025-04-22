@@ -44,7 +44,7 @@ public class UserWindow extends JFrame {
         JPanel statPanel = new JPanel();
         statPanel.setBackground(Color.WHITE);
         statPanel.setPreferredSize(new Dimension(400, 50));
-        totalPrice = new JLabel("Ціна всіх товарів: " + stor.getTotalPrice());
+        totalPrice = new JLabel(String.format("Ціна всіх товарів: %.2f", + stor.getTotalPrice()));
         totalPrice.setFont(new Font("Verdana", Font.BOLD, 20));
         statPanel.add(totalPrice);
         southPanel.add(statPanel);
@@ -340,7 +340,33 @@ public class UserWindow extends JFrame {
     }
 
     private void groupPrice() {
+        JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
+        frame.setName("Ціни по групах");
+        frame.setSize(300, 400);
 
+        JLabel lb = new JLabel("Ціни в групах");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.add(lb);
+        frame.add(titlePanel, BorderLayout.NORTH);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        for(int i=0; i<stor.groups.length; i++){
+            JLabel lbl = new JLabel(String.format("%s: %.2f", stor.groups[i].getName(), stor.groups[i].priceForItems()));
+            lbl.setFont(new Font("Verdana", Font.PLAIN, 20));
+            panel.add(lbl);
+        }
+
+        JScrollPane sp = new JScrollPane(panel);
+        frame.add(sp, BorderLayout.CENTER);
+        frame.setVisible(true);
     }
 
     private void showGroupInfo(JFrame frame, GroupOfItems gr){
@@ -406,7 +432,7 @@ public class UserWindow extends JFrame {
                 for(int i = 0; i < spiners.length; i++){
                     gr.items[i].increaseAmount((Integer) spiners[i].getValue());
                 }
-                totalPrice.setText("Ціна всіх товарів: " + stor.getTotalPrice());
+                totalPrice.setText(String.format("Ціна всіх товарів: %.2f", + stor.getTotalPrice()));
             });
     }
 
@@ -453,7 +479,7 @@ public class UserWindow extends JFrame {
             for(int i = 0; i < spiners.length; i++){
                 gr.items[i].decreaseAmount((Integer) spiners[i].getValue());
             }
-            totalPrice.setText("Ціна всіх товарів: " + stor.getTotalPrice());
+            totalPrice.setText(String.format("Ціна всіх товарів: %.2f", + stor.getTotalPrice()));
         });
     }
 }
