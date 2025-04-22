@@ -56,7 +56,7 @@ class Item {
     }
 
     public String toString() {
-        return name+" description: "+description+" producer: "+producer +" amount in stock: "+amount+" price: "+price+" belongs to: "+groupOfItems;
+        return "Назва: "+name+"\nОпис: "+description+"\nВиробник: "+producer +"\nКількість: "+amount+"\nЦіна: "+price;
     }
 
     public double getTotalPrice() {
@@ -122,7 +122,7 @@ class GroupOfItems {
             return str+="\nТоварів не знайдено";
         }
         for (Item item : items) {
-            str += "\n"+item.toString();
+            str += "\n"+item.toString()+"\n";
         }
         return str;
     }

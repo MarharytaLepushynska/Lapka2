@@ -29,7 +29,7 @@ public class UserWindow extends JFrame {
         stor.addGroup(gr1);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1000, 600);
-        this.getContentPane().setBackground(Color.decode("#87CEFA"));
+        this.getContentPane().setBackground(Color.decode("#cce6ff"));
         initializeNorthPanel();
         add(northPanel, BorderLayout.NORTH);
         initializeCenterPanel();
@@ -42,13 +42,13 @@ public class UserWindow extends JFrame {
     private void stat(){
         southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel statPanel = new JPanel();
-        statPanel.setBackground(Color.WHITE);
+        statPanel.setBackground(Color.decode("#cce6ff"));
         statPanel.setPreferredSize(new Dimension(400, 50));
         totalPrice = new JLabel(String.format("Ціна всіх товарів: %.2f", + stor.getTotalPrice()));
         totalPrice.setFont(new Font("Verdana", Font.BOLD, 20));
         statPanel.add(totalPrice);
         southPanel.add(statPanel);
-        southPanel.setBackground(Color.decode("#87CEFA"));
+        southPanel.setBackground(Color.decode("#cce6ff"));
         southPanel.setVisible(true);
     }
 
@@ -73,7 +73,7 @@ public class UserWindow extends JFrame {
         storage.addActionListener(e -> {int selected = storage.getSelectedIndex();
         switch (selected) {
             case 1:
-                addItem();
+                increaceCount();
                 break;
             case 2:
                 writeoffItem();
@@ -115,7 +115,7 @@ public class UserWindow extends JFrame {
         centerPanel.setPreferredSize(new Dimension(800, 300));
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(100, 0, 20, 0));
-        centerPanel.setBackground(Color.decode("#87CEFA"));
+        centerPanel.setBackground(Color.decode("#cce6ff"));
 
         JLabel lbl = new JLabel("Item search");
         lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -157,6 +157,7 @@ public class UserWindow extends JFrame {
         frame.setSize(500, 200);
 
         JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        title.setBackground(Color.decode("#cce6ff"));
         JLabel lb = new JLabel("Інформація про товар");
         lb.setFont(new Font("Verdana", Font.BOLD, 20));
         title.add(lb);
@@ -169,7 +170,7 @@ public class UserWindow extends JFrame {
             +"\nОпис: "+found.getDescription()
             +"\nВиробник: "+found.getProducer()
                     +"\nКількість: "+found.getPrice()
-                    +String.format("\nЦіна: %.2f",+found.getPrice()));
+                    +String.format("\nЦіна: %.2f грн",+found.getPrice()));
         }else{
             textArea.setText("Такого товару немає");
         }
@@ -181,7 +182,7 @@ public class UserWindow extends JFrame {
         frame.setVisible(true);
     }
 
-    private void addItem() {
+    private void increaceCount() {
         JFrame frame = new JFrame();
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -195,6 +196,7 @@ public class UserWindow extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        title.setBackground(Color.decode("#cce6ff"));
         JLabel lb = new JLabel("Оберіть групу");
         lb.setFont(new Font("Verdana", Font.BOLD, 20));
         title.add(lb);
@@ -218,6 +220,7 @@ public class UserWindow extends JFrame {
         btn.setPreferredSize(new Dimension(100, 40));
 
         buttonPanel.add(btn);
+        buttonPanel.setBackground(Color.decode("#cce6ff"));
         frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
 
@@ -253,6 +256,7 @@ public class UserWindow extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        title.setBackground(Color.decode("#cce6ff"));
         JLabel lb = new JLabel("Оберіть групу");
         lb.setFont(new Font("Verdana", Font.BOLD, 20));
         title.add(lb);
@@ -276,6 +280,7 @@ public class UserWindow extends JFrame {
         btn.setPreferredSize(new Dimension(100, 40));
 
         buttonPanel.add(btn);
+        buttonPanel.setBackground(Color.decode("#cce6ff"));
         frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
 
@@ -299,7 +304,7 @@ public class UserWindow extends JFrame {
 
     private void storageStatistics() {
         JFrame frame = new JFrame();
-        frame.setSize(500, 300);
+        frame.setSize(500, 400);
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -310,10 +315,12 @@ public class UserWindow extends JFrame {
         JLabel lb = new JLabel("Інформація по складу");
         lb.setFont(new Font("Verdana", Font.BOLD, 20));
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.setBackground(Color.decode("#cce6ff"));
         titlePanel.add(lb);
         frame.add(titlePanel, BorderLayout.NORTH);
 
         JTextArea ta = new JTextArea(stor.getAllInfoAboutStorage());
+        ta.setFont(new Font("Verdana", Font.BOLD, 10));
         ta.setEditable(false);
 
         JScrollPane sp = new JScrollPane(ta);
@@ -336,6 +343,7 @@ public class UserWindow extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        title.setBackground(Color.decode("#cce6ff"));
         JLabel lb = new JLabel("Оберіть групу");
         lb.setFont(new Font("Verdana", Font.BOLD, 20));
         title.add(lb);
@@ -351,6 +359,7 @@ public class UserWindow extends JFrame {
         frame.add(sp, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.decode("#cce6ff"));
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
         JButton btn = new JButton("Далі");
@@ -394,6 +403,7 @@ public class UserWindow extends JFrame {
         JLabel lb = new JLabel("Ціни в групах");
         lb.setFont(new Font("Verdana", Font.BOLD, 20));
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.setBackground(Color.decode("#cce6ff"));
         titlePanel.add(lb);
         frame.add(titlePanel, BorderLayout.NORTH);
 
@@ -418,10 +428,12 @@ public class UserWindow extends JFrame {
         JLabel lb = new JLabel("Інформація по групі");
         lb.setFont(new Font("Verdana", Font.BOLD, 20));
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.setBackground(Color.decode("#cce6ff"));
         titlePanel.add(lb);
         frame2.add(titlePanel, BorderLayout.NORTH);
 
         JTextArea ta = new JTextArea(gr.getInfoAboutItems());
+        ta.setFont(new Font("Verdana", Font.BOLD, 10));
         ta.setEditable(false);
 
         JScrollPane sp = new JScrollPane(ta);
@@ -437,6 +449,7 @@ public class UserWindow extends JFrame {
             JLabel lb = new JLabel("Додавання товару");
             lb.setFont(new Font("Verdana", Font.BOLD, 20));
             JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            titlePanel.setBackground(Color.decode("#cce6ff"));
             titlePanel.add(lb);
             frame.add(titlePanel, BorderLayout.NORTH);
 
@@ -461,6 +474,7 @@ public class UserWindow extends JFrame {
             frame.add(sp, BorderLayout.CENTER);
 
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            buttonPanel.setBackground(Color.decode("#cce6ff"));
             JButton btn = new JButton("Додати");
             btn.setFont(new Font("Verdana", Font.BOLD, 20));
             btn.setPreferredSize(new Dimension(200, 40));
@@ -484,6 +498,7 @@ public class UserWindow extends JFrame {
         JLabel lb = new JLabel("Списання товару");
         lb.setFont(new Font("Verdana", Font.BOLD, 20));
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.setBackground(Color.decode("#cce6ff"));
         titlePanel.add(lb);
         frame.add(titlePanel, BorderLayout.NORTH);
 
@@ -508,6 +523,7 @@ public class UserWindow extends JFrame {
         frame.add(sp, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(Color.decode("#cce6ff"));
         JButton btn = new JButton("Списати");
         btn.setFont(new Font("Verdana", Font.BOLD, 20));
         btn.setPreferredSize(new Dimension(200, 40));
