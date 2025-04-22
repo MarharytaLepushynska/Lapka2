@@ -28,13 +28,14 @@ import java.util.Scanner;
 @Getter
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Item{
+class Item {
     private String name;
     private String description;
     private String producer;
     private int amount;
     private double price;
     private String groupOfItems;
+
     Item(String name, String description, String producer, int amount, double price, String groupOfItems) {
         this.name = name;
         this.description = description;
@@ -82,7 +83,7 @@ class Item{
 @Setter
 @Getter
 class GroupOfItems {
-    private Item[] items;
+    public Item[] items;
     private String name;
     private String description;
 //    delete array of items
@@ -283,7 +284,7 @@ class FileData {
 @Getter
 @Setter
 class Storage {
-    private GroupOfItems[] groups;
+    public GroupOfItems[] groups;
     private String name;
     // не треба приймати масив груп
     Storage(String name) {
@@ -362,7 +363,7 @@ class Storage {
 }
 
 public class Lapka2 {
-    public static void main(String [] args) throws IOException {
+    /*public static void main(String [] args) throws IOException {
         Item[] items = new Item[3];
         items[0] = new Item("Product0", "", "Roshen", 1, 20, "Name");
         items[1] = new Item("Product1", "", "Roshen", 1, 20, "Name");
@@ -430,6 +431,6 @@ public class Lapka2 {
 //        groupOfItems.removeItem("Grechka");
 //        System.out.println("AFTER DELETE");
 //        groupOfItems.getInfoAboutItems();
-    }
+    }*/
 
 }
