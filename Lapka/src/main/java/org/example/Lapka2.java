@@ -360,6 +360,18 @@ class Storage {
         newGroups[groups.length] = group;
         return newGroups;
     }
+
+    public String findItem(String itemName) {
+        String str = "Товар не знайдено";
+        for (GroupOfItems group : groups) {
+            for (Item item : group.getItems()) {
+                if (item.getName().equalsIgnoreCase(itemName)) {
+                    return item.toString();
+                }
+            }
+        }
+        return str;
+    }
 }
 
 public class Lapka2 {

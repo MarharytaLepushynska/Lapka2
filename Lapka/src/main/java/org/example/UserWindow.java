@@ -136,8 +136,37 @@ public class UserWindow extends JFrame {
         btn.setAlignmentX(Component.CENTER_ALIGNMENT);
         btn.setFont(new Font("Verdana", Font.BOLD, 30));
         centerPanel.add(btn);
+        btn.addActionListener(e -> {
+            String item = search.getText();
+            findItem(item);
+        });
 
         centerPanel.setVisible(true);
+    }
+
+    private void findItem(String item) {
+        JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
+        frame.setName("Пошук товару");
+        frame.setSize(500, 200);
+
+        JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel lb = new JLabel("Інформація про товар");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        title.add(lb);
+        frame.add(title, BorderLayout.NORTH);
+
+        JTextArea textArea = new JTextArea(stor.findItem(item));
+        textArea.setEditable(false);
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        frame.add(scrollPane, BorderLayout.CENTER);
+        frame.setVisible(true);
     }
 
     private void addItem() {
