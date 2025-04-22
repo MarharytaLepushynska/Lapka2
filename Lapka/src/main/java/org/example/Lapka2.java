@@ -49,13 +49,10 @@ class Item {
         amount += number;
     }
 
-    //щоб потім можна було сповістити користувача про помилку
-    public boolean decreaseAmount(int number) {
-        if (amount > number) {
+    public void decreaseAmount(int number) {
+        if (amount >= number) {
             amount -= number;
-            return true;
         }
-        return false;
     }
 
     public String toString() {

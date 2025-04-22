@@ -115,6 +115,7 @@ public class UserWindow extends JFrame {
 
     private void addItem() {
         JFrame frame = new JFrame();
+        frame.setName("Додавання товару");
         frame.setSize(300, 400);
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -164,7 +165,55 @@ public class UserWindow extends JFrame {
         });
     }
     private void writeoffItem() {
+        JFrame frame = new JFrame();
+        frame.setName("Списання товару");
+        frame.setSize(300, 400);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
+        JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel lb = new JLabel("Оберіть групу");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        title.add(lb);
+        frame.add(title, BorderLayout.NORTH);
+
+        ButtonGroup bg = new ButtonGroup();
+        for(int i=0; i<stor.groups.length; i++){
+            JRadioButton rb = new JRadioButton(stor.groups[i].getName());
+            panel.add(rb);
+            bg.add(rb);
+        }
+        JScrollPane sp = new JScrollPane(panel);
+        frame.add(sp, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        JButton btn = new JButton("Далі");
+        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btn.setFont(new Font("Verdana", Font.BOLD, 20));
+        btn.setPreferredSize(new Dimension(100, 40));
+
+        buttonPanel.add(btn);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+        frame.setVisible(true);
+
+        btn.addActionListener(e -> {
+            boolean select = false;
+            int number = -1;
+            for(Component cmps: panel.getComponents()){
+                number++;
+                JRadioButton rb = (JRadioButton) cmps;
+                if(rb.isSelected()){
+                    decreaseAmount(frame, stor.groups[number]);
+                    select = true;
+                    break;
+                }
+            }
+            if(!select){
+                JOptionPane.showMessageDialog(frame, "Потрібно обрати групу перед натисканням кнопки");
+            }
+        });
     }
     private void statistics() {
 
@@ -214,5 +263,51 @@ public class UserWindow extends JFrame {
                     gr.items[i].increaseAmount((Integer) spiners[i].getValue());
                 }
             });
+    }
+
+    private void decreaseAmount(JFrame frame, GroupOfItems gr) {
+        frame.getContentPane().removeAll();
+        JSpinner[] spiners = new JSpinner[gr.items.length];
+
+        JLabel lb = new JLabel("Списання товару");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.add(lb);
+        frame.add(titlePanel, BorderLayout.NORTH);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        for (int i = 0; i < gr.items.length; i++) {
+            JPanel item = new JPanel(new GridLayout(1, 2));
+            item.setPreferredSize(new Dimension(250, 20));
+            item.add(new JLabel(gr.items[i].getName()));
+
+            JSpinner spinner = new JSpinner(new SpinnerNumberModel(0, 0, gr.items[i].getAmount(), 1));
+            spinner.setPreferredSize(new Dimension(80, 30));
+            item.add(spinner);
+            spiners[i] = spinner;
+
+            panel.add(item);
+        }
+
+        JScrollPane sp = new JScrollPane(panel);
+        sp.setPreferredSize(new Dimension(250, 200));
+        frame.add(sp, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton btn = new JButton("Списати");
+        btn.setFont(new Font("Verdana", Font.BOLD, 20));
+        btn.setPreferredSize(new Dimension(200, 40));
+        buttonPanel.add(btn);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+
+        frame.setVisible(true);
+
+        btn.addActionListener(e -> {
+            for(int i = 0; i < spiners.length; i++){
+                gr.items[i].decreaseAmount((Integer) spiners[i].getValue());
+            }
+        });
     }
 }
