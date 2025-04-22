@@ -47,7 +47,10 @@ public class UserWindow extends JFrame {
         storage.addItem("");
         storage.addItem("Додавання товару");
         storage.addItem("Списання товару");
-        storage.addItem("Статистичні дані");
+        storage.addItem("Інформація по складу");
+        storage.addItem("Інформація по групі");
+        storage.addItem("Вартість по складу");
+        storage.addItem("Вартість по групі");
         northPanel.add(storage);
         storage.addActionListener(e -> {int selected = storage.getSelectedIndex();
         switch (selected) {
@@ -58,7 +61,16 @@ public class UserWindow extends JFrame {
                 writeoffItem();
                 break;
             case 3:
-                statistics();
+                storageStatistics();
+                break;
+            case 4:
+                groupStatistics();
+                break;
+            case 5:
+                storagePrice();
+                break;
+            case 6:
+                groupPrice();
                 break;
             default:
                 break;
@@ -164,6 +176,7 @@ public class UserWindow extends JFrame {
            }
         });
     }
+
     private void writeoffItem() {
         JFrame frame = new JFrame();
         frame.setName("Списання товару");
@@ -215,8 +228,104 @@ public class UserWindow extends JFrame {
             }
         });
     }
-    private void statistics() {
 
+    private void storageStatistics() {
+        JFrame frame = new JFrame();
+        frame.setSize(500, 300);
+
+        JLabel lb = new JLabel("Інформація по складу");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.add(lb);
+        frame.add(titlePanel, BorderLayout.NORTH);
+
+        JTextArea ta = new JTextArea(stor.getAllInfoAboutStorage());
+        ta.setEditable(false);
+
+        JScrollPane sp = new JScrollPane(ta);
+
+        frame.add(sp, BorderLayout.CENTER);
+        frame.setVisible(true);
+    }
+
+    private void groupStatistics() {
+        JFrame frame = new JFrame();
+        frame.setName("Статистика по групі");
+        frame.setSize(300, 400);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel lb = new JLabel("Оберіть групу");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        title.add(lb);
+        frame.add(title, BorderLayout.NORTH);
+
+        ButtonGroup bg = new ButtonGroup();
+        for(int i=0; i<stor.groups.length; i++){
+            JRadioButton rb = new JRadioButton(stor.groups[i].getName());
+            panel.add(rb);
+            bg.add(rb);
+        }
+        JScrollPane sp = new JScrollPane(panel);
+        frame.add(sp, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        JButton btn = new JButton("Далі");
+        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btn.setFont(new Font("Verdana", Font.BOLD, 20));
+        btn.setPreferredSize(new Dimension(100, 40));
+
+        buttonPanel.add(btn);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+        frame.setVisible(true);
+
+        btn.addActionListener(e -> {
+            boolean select = false;
+            int number = -1;
+            for(Component cmps: panel.getComponents()){
+                number++;
+                JRadioButton rb = (JRadioButton) cmps;
+                if(rb.isSelected()){
+                    showGroupInfo(frame, stor.groups[number]);
+                    select = true;
+                    break;
+                }
+            }
+            if(!select){
+                JOptionPane.showMessageDialog(frame, "Потрібно обрати групу перед натисканням кнопки");
+            }
+        });
+    }
+
+    private void storagePrice() {
+
+    }
+
+    private void groupPrice() {
+
+    }
+
+    private void showGroupInfo(JFrame frame, GroupOfItems gr){
+        frame.setVisible(false);
+        JFrame frame2 = new JFrame();
+        frame2.setSize(500, 300);
+
+        JLabel lb = new JLabel("Інформація по групі");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.add(lb);
+        frame2.add(titlePanel, BorderLayout.NORTH);
+
+        JTextArea ta = new JTextArea(gr.getInfoAboutItems());
+        ta.setEditable(false);
+
+        JScrollPane sp = new JScrollPane(ta);
+
+        frame2.add(sp, BorderLayout.CENTER);
+        frame2.setVisible(true);
     }
 
     private void increaseAmount(JFrame frame, GroupOfItems gr) {

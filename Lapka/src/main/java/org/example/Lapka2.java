@@ -116,14 +116,15 @@ class GroupOfItems {
     }
 
 // принтити в консоль взагалі щось треба?
-    public void getInfoAboutItems() {
+    public String getInfoAboutItems() {
+        String str = "============ 🍶"+this.name+"🍎 ============";
         if (items.length == 0) {
-            System.out.println("No items found");
-            return;
+            return str+="\nТоварів не знайдено";
         }
         for (Item item : items) {
-            System.out.println(item);
+            str += "\n"+item.toString();
         }
+        return str;
     }
 
     public double priceForItems() {
@@ -299,13 +300,15 @@ class Storage {
         return totalPrice;
     }
 
-    public void getAllInfoAboutStorage(){
+    public String getAllInfoAboutStorage(){
+        String str = "";
         if (groups.length == 0) {
-            System.out.println("No groups found");
+            return str+="Груп не знайдено";
         }
         for (GroupOfItems group : groups) {
-            group.getInfoAboutItems();
+            str+="\n"+group.getInfoAboutItems();
         }
+        return str;
     }
 
     public void editGroup(String groupName, String newGroupName) throws IOException {
