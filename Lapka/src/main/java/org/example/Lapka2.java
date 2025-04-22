@@ -361,16 +361,16 @@ class Storage {
         return newGroups;
     }
 
-    public String findItem(String itemName) {
+    public Item findItem(String itemName) {
         String str = "Товар не знайдено";
         for (GroupOfItems group : groups) {
             for (Item item : group.getItems()) {
                 if (item.getName().equalsIgnoreCase(itemName)) {
-                    return item.toString();
+                    return item;
                 }
             }
         }
-        return str;
+        return null;
     }
 }
 

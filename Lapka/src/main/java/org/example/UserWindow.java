@@ -139,6 +139,7 @@ public class UserWindow extends JFrame {
         btn.addActionListener(e -> {
             String item = search.getText();
             findItem(item);
+            search.setText("");
         });
 
         centerPanel.setVisible(true);
@@ -161,7 +162,18 @@ public class UserWindow extends JFrame {
         title.add(lb);
         frame.add(title, BorderLayout.NORTH);
 
-        JTextArea textArea = new JTextArea(stor.findItem(item));
+        JTextArea textArea = new JTextArea();
+        Item found = stor.findItem(item);
+        if (found != null) {
+            textArea.setText("Назва: "+found.getName()
+            +"\nОпис: "+found.getDescription()
+            +"\nВиробник: "+found.getProducer()
+                    +"\nКількість: "+found.getPrice()
+                    +String.format("\nЦіна: %.2f",+found.getPrice()));
+        }else{
+            textArea.setText("Такого товару немає");
+        }
+        textArea.setFont(new Font("Verdana", Font.BOLD, 15));
         textArea.setEditable(false);
 
         JScrollPane scrollPane = new JScrollPane(textArea);
