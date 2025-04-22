@@ -2,11 +2,15 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 public class UserWindow extends JFrame {
     private JPanel northPanel;
     private JPanel centerPanel;
+    private JPanel southPanel;
+    private JLabel totalPrice;
     Storage stor = new Storage("Склад");
 
     public UserWindow() throws IOException {
@@ -30,7 +34,22 @@ public class UserWindow extends JFrame {
         add(northPanel, BorderLayout.NORTH);
         initializeCenterPanel();
         add(centerPanel, BorderLayout.CENTER);
+        stat();
+        add(southPanel, BorderLayout.SOUTH);
         this.setVisible(true);
+    }
+
+    private void stat(){
+        southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel statPanel = new JPanel();
+        statPanel.setBackground(Color.WHITE);
+        statPanel.setPreferredSize(new Dimension(400, 50));
+        totalPrice = new JLabel("Ціна всіх товарів: " + stor.getTotalPrice());
+        totalPrice.setFont(new Font("Verdana", Font.BOLD, 20));
+        statPanel.add(totalPrice);
+        southPanel.add(statPanel);
+        southPanel.setBackground(Color.decode("#87CEFA"));
+        southPanel.setVisible(true);
     }
 
     private void initializeNorthPanel() {
@@ -49,7 +68,6 @@ public class UserWindow extends JFrame {
         storage.addItem("Списання товару");
         storage.addItem("Інформація по складу");
         storage.addItem("Інформація по групі");
-        storage.addItem("Вартість по складу");
         storage.addItem("Вартість по групі");
         northPanel.add(storage);
         storage.addActionListener(e -> {int selected = storage.getSelectedIndex();
@@ -67,9 +85,6 @@ public class UserWindow extends JFrame {
                 groupStatistics();
                 break;
             case 5:
-                storagePrice();
-                break;
-            case 6:
                 groupPrice();
                 break;
             default:
@@ -127,6 +142,12 @@ public class UserWindow extends JFrame {
 
     private void addItem() {
         JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
         frame.setName("Додавання товару");
         frame.setSize(300, 400);
         JPanel panel = new JPanel();
@@ -179,6 +200,12 @@ public class UserWindow extends JFrame {
 
     private void writeoffItem() {
         JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
         frame.setName("Списання товару");
         frame.setSize(300, 400);
         JPanel panel = new JPanel();
@@ -232,6 +259,12 @@ public class UserWindow extends JFrame {
     private void storageStatistics() {
         JFrame frame = new JFrame();
         frame.setSize(500, 300);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
 
         JLabel lb = new JLabel("Інформація по складу");
         lb.setFont(new Font("Verdana", Font.BOLD, 20));
@@ -250,6 +283,12 @@ public class UserWindow extends JFrame {
 
     private void groupStatistics() {
         JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
         frame.setName("Статистика по групі");
         frame.setSize(300, 400);
         JPanel panel = new JPanel();
@@ -298,10 +337,6 @@ public class UserWindow extends JFrame {
                 JOptionPane.showMessageDialog(frame, "Потрібно обрати групу перед натисканням кнопки");
             }
         });
-    }
-
-    private void storagePrice() {
-
     }
 
     private void groupPrice() {
@@ -371,6 +406,7 @@ public class UserWindow extends JFrame {
                 for(int i = 0; i < spiners.length; i++){
                     gr.items[i].increaseAmount((Integer) spiners[i].getValue());
                 }
+                totalPrice.setText("Ціна всіх товарів: " + stor.getTotalPrice());
             });
     }
 
@@ -417,6 +453,7 @@ public class UserWindow extends JFrame {
             for(int i = 0; i < spiners.length; i++){
                 gr.items[i].decreaseAmount((Integer) spiners[i].getValue());
             }
+            totalPrice.setText("Ціна всіх товарів: " + stor.getTotalPrice());
         });
     }
 }
