@@ -122,6 +122,18 @@ public class UserWindow extends JFrame {
         item.addItem("Редагувати товар");
         item.addItem("Видалити товар");
         northPanel.add(item);
+        item.addActionListener(e -> {int selected = item.getSelectedIndex();
+        switch (selected) {
+            case 1:
+                addingItem();
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                break;
+        }});
     }
 
     private void initializeCenterPanel() {
@@ -157,6 +169,216 @@ public class UserWindow extends JFrame {
         });
 
         centerPanel.setVisible(true);
+    }
+
+    private void addingItem(){
+        JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
+        frame.setName("Додавання товару");
+        frame.setSize(300, 400);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        title.setBackground(Color.decode("#cce6ff"));
+        JLabel lb = new JLabel("Оберіть групу");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        title.add(lb);
+        frame.add(title, BorderLayout.NORTH);
+
+        ButtonGroup bg = new ButtonGroup();
+        for(int i=0; i<stor.groups.length; i++){
+            JRadioButton rb = new JRadioButton(stor.groups[i].getName());
+            panel.add(rb);
+            bg.add(rb);
+        }
+        JScrollPane sp = new JScrollPane(panel);
+        frame.add(sp, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        JButton btn = new JButton("Далі");
+        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btn.setFont(new Font("Verdana", Font.BOLD, 20));
+        btn.setPreferredSize(new Dimension(100, 40));
+
+        buttonPanel.add(btn);
+        buttonPanel.setBackground(Color.decode("#cce6ff"));
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+        frame.setVisible(true);
+
+        btn.addActionListener(e -> {
+            boolean select = false;
+            int number = -1;
+            for(Component cmps: panel.getComponents()){
+                number++;
+                JRadioButton rb = (JRadioButton) cmps;
+                if(rb.isSelected()){
+                    addItem(stor.groups[number].getName());
+                    select = true;
+                    break;
+                }
+            }
+            if(!select){
+                JOptionPane.showMessageDialog(frame, "Потрібно обрати групу перед натисканням кнопки");
+            }
+        });
+
+    }
+
+    private void addItem(String groupName){
+        JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
+        frame.setName("Додавання товару");
+        frame.setLayout(new BorderLayout());
+        frame.setSize(700, 400);
+
+        JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        title.setBackground(Color.decode("#cce6ff"));
+        JLabel lb = new JLabel("Додавання товару");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        title.add(lb);
+        frame.add(title, BorderLayout.NORTH);
+
+        JPanel textPanel = new JPanel();
+        textPanel.setLayout(new GridLayout(6,2));
+
+        //item name
+        JLabel nameLabel = new JLabel("Назва:");
+        nameLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        textPanel.add(nameLabel);
+
+        JTextField nameField = new JTextField();
+        nameField.setSize(250, 40);
+        nameField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        textPanel.add(nameField);
+
+        //item description
+        JLabel descriptionLabel = new JLabel("Опис:");
+        descriptionLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        textPanel.add(descriptionLabel);
+
+        JTextField descriptionField = new JTextField();
+        descriptionField.setSize(250, 40);
+        descriptionField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        textPanel.add(descriptionField);
+
+        //item's producer
+        JLabel producerLabel = new JLabel("Виробник:");
+        producerLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        textPanel.add(producerLabel);
+
+        JTextField producerField = new JTextField();
+        producerField.setSize(250, 40);
+        producerField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        textPanel.add(producerField);
+
+        //item price
+        JLabel priceLabel = new JLabel("Ціна за штуку:");
+        priceLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        textPanel.add(priceLabel);
+
+        JSpinner priceField = new JSpinner(new SpinnerNumberModel(0, 0, 1000, 0.1));
+        priceField.setSize(250, 40);
+        priceField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        textPanel.add(priceField);
+
+        //item amount
+        JLabel amountLabel = new JLabel("Кількість:");
+        amountLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        textPanel.add(amountLabel);
+
+        JSpinner amountField = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
+        amountField.setSize(250, 40);
+        amountField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        textPanel.add(amountField);
+
+        JLabel groupLabel = new JLabel("Група товарів:");
+        groupLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        textPanel.add(groupLabel);
+
+        JTextField groupField = new JTextField(groupName);
+        groupField.setSize(250, 40);
+        groupField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        groupField.setEditable(false);
+        textPanel.add(groupField);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(Color.decode("#cce6ff"));
+
+        JButton button = new JButton("Додати");
+        button.setPreferredSize(new Dimension(250, 30));
+        button.setFont(new Font("Verdana", Font.BOLD, 20));
+        buttonPanel.add(button);
+
+        frame.add(textPanel, BorderLayout.CENTER);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+        frame.setVisible(true);
+
+        button.addActionListener(e ->{
+            String itemName = nameField.getText().trim();
+            String itemDescription = descriptionField.getText().trim();
+            String itemProducer = producerField.getText().trim();
+            int itemAmount = Integer.parseInt(String.valueOf(amountField.getValue()));
+            double itemPrice = Double.parseDouble(String.valueOf(priceField.getValue()));
+            String itemGroup = groupField.getText();
+
+            boolean success = false;
+            boolean exists = false;
+
+            if(!itemName.isEmpty() && !itemDescription.isEmpty() && !itemProducer.isEmpty()){
+                int groupNumber = stor.findGroup(itemGroup);
+                for (GroupOfItems group : stor.getGroups()) {
+                    for(Item item : group.getItems()) {
+                        if(item.getName().equalsIgnoreCase(itemName)) {
+                            exists = true;
+                            break;
+                        }
+                    }
+                }
+                if (exists) {
+                    JOptionPane.showMessageDialog(frame, "Товар з такою назвою вже існує!");
+                    nameField.setText("");
+                    descriptionField.setText("");
+                    producerField.setText("");
+                    amountField.setValue(0);
+                    priceField.setValue(0);
+                    return;
+                }
+                try {
+                    stor.groups[groupNumber].addItem(new Item(itemName, itemDescription,itemProducer,
+                            itemAmount,itemPrice,itemGroup));
+                    success = true;
+                    totalPrice.setText(String.format("Ціна всіх товарів: %.2f", + stor.getTotalPrice()));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(frame, "Для створення товару усі поля мають бути заповнені!");
+            }
+
+            if(success){
+                JOptionPane.showMessageDialog(frame, "Товар було успішно створено!");
+            }
+
+            nameField.setText("");
+            descriptionField.setText("");
+            producerField.setText("");
+            amountField.setValue(0);
+            priceField.setValue(0);
+        });
+
     }
 
     private void addGroup(){
