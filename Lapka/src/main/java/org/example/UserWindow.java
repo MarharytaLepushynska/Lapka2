@@ -128,6 +128,7 @@ public class UserWindow extends JFrame {
                 addingItem();
                 break;
             case 2:
+                editingItem();
                 break;
             case 3:
                 break;
@@ -230,6 +231,67 @@ public class UserWindow extends JFrame {
             }
         });
 
+    }
+
+    private void editingItem(){
+        JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
+        frame.setName("Редагування товару");
+        frame.setSize(600, 300);
+        frame.setLayout(new BorderLayout());
+
+        JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        title.setBackground(Color.decode("#cce6ff"));
+
+        JLabel lb = new JLabel("Введіть назву товару для редагування");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        title.add(lb);
+        frame.add(title, BorderLayout.NORTH);
+
+        JPanel centerPanel = new JPanel(new GridLayout(3, 1));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 35, 50, 50));
+        centerPanel.add(Box.createVerticalStrut(40));
+
+        JTextField search = new JTextField();
+        search.setFont(new Font("Verdana", Font.PLAIN, 25));
+        centerPanel.add(search);
+
+        centerPanel.add(Box.createVerticalStrut(40));
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(Color.decode("#cce6ff"));
+
+        JButton button = new JButton("Шукати");
+        button.setPreferredSize(new Dimension(250, 30));
+        button.setFont(new Font("Verdana", Font.BOLD, 20));
+        buttonPanel.add(button);
+
+        frame.add(centerPanel, BorderLayout.CENTER);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+        frame.setVisible(true);
+
+        button.addActionListener(e -> {
+
+            String itemName = search.getText().trim();
+
+            if(!itemName.isEmpty()) {
+                Item foundItem = stor.findItem(itemName);
+                if(foundItem!=null){
+                    editChosenItem(foundItem, itemName);
+                } else {
+                    JOptionPane.showMessageDialog(frame,"Товар не було знайдено!");
+                    search.setText("");
+                }
+            } else {
+                JOptionPane.showMessageDialog(frame,"Спочатку введіть назву товару!");
+                search.setText("");
+            }
+        });
     }
 
     private void addItem(String groupName){
@@ -379,6 +441,164 @@ public class UserWindow extends JFrame {
             priceField.setValue(0);
         });
 
+    }
+
+    private void editChosenItem(Item foundItem, String itemName){
+        JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
+        frame.setName("Додавання товару");
+        frame.setLayout(new BorderLayout());
+        frame.setSize(700, 400);
+
+        JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        title.setBackground(Color.decode("#cce6ff"));
+        JLabel lb = new JLabel("Додавання товару");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        title.add(lb);
+        frame.add(title, BorderLayout.NORTH);
+
+        JPanel textPanel = new JPanel();
+        textPanel.setLayout(new GridLayout(6,2));
+
+        //item name
+        JLabel nameLabel = new JLabel("Назва:");
+        nameLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        textPanel.add(nameLabel);
+
+        JTextField nameField = new JTextField();
+        nameField.setSize(250, 40);
+        nameField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        nameField.setText(foundItem.getName());
+        textPanel.add(nameField);
+
+        //item description
+        JLabel descriptionLabel = new JLabel("Опис:");
+        descriptionLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        textPanel.add(descriptionLabel);
+
+        JTextField descriptionField = new JTextField();
+        descriptionField.setSize(250, 40);
+        descriptionField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        descriptionField.setText(foundItem.getDescription());
+        textPanel.add(descriptionField);
+
+        //item's producer
+        JLabel producerLabel = new JLabel("Виробник:");
+        producerLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        textPanel.add(producerLabel);
+
+        JTextField producerField = new JTextField();
+        producerField.setSize(250, 40);
+        producerField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        producerField.setText(foundItem.getProducer());
+        textPanel.add(producerField);
+
+        //item price
+        JLabel priceLabel = new JLabel("Ціна за штуку:");
+        priceLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        textPanel.add(priceLabel);
+
+        JSpinner priceField = new JSpinner(new SpinnerNumberModel(0, 0, 1000, 0.1));
+        priceField.setSize(250, 40);
+        priceField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        priceField.setValue(foundItem.getPrice());
+        textPanel.add(priceField);
+
+        //item amount
+        JLabel amountLabel = new JLabel("Кількість:");
+        amountLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        textPanel.add(amountLabel);
+
+        JSpinner amountField = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
+        amountField.setSize(250, 40);
+        amountField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        amountField.setValue(foundItem.getAmount());
+        textPanel.add(amountField);
+
+        JLabel groupLabel = new JLabel("Група товарів:");
+        groupLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        textPanel.add(groupLabel);
+
+        JComboBox<String> groupField = new JComboBox<>();
+        groupField.setSize(250, 40);
+        groupField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        for (GroupOfItems group : stor.getGroups()) {
+            groupField.addItem(group.getName());
+        }
+        groupField.setSelectedItem(foundItem.getGroupOfItems());
+        textPanel.add(groupField);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(Color.decode("#cce6ff"));
+
+        JButton button = new JButton("Редагувати");
+        button.setPreferredSize(new Dimension(250, 30));
+        button.setFont(new Font("Verdana", Font.BOLD, 20));
+        buttonPanel.add(button);
+
+        frame.add(textPanel, BorderLayout.CENTER);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+        frame.setVisible(true);
+
+        button.addActionListener(e ->{
+            String newItemName = nameField.getText().trim();
+            String newItemDescription = descriptionField.getText().trim();
+            String newItemProducer = producerField.getText().trim();
+            int newItemAmount = Integer.parseInt(String.valueOf(amountField.getValue()));
+            double newItemPrice = Double.parseDouble(String.valueOf(priceField.getValue()));
+            String newItemGroup = (String) groupField.getSelectedItem();
+
+            boolean changed = false;
+            boolean exists = false;
+
+            if(!newItemName.isEmpty() && !newItemDescription.isEmpty() && !newItemProducer.isEmpty()){
+                for (GroupOfItems group : stor.getGroups()) {
+                    for(Item item : group.getItems()) {
+                        if(item.getName().equalsIgnoreCase(newItemName) &&
+                                !item.getName().equalsIgnoreCase(itemName)) {
+                            exists = true;
+                            break;
+                        }
+                    }
+                }
+                if(exists){
+                    JOptionPane.showMessageDialog(frame,"Товар з такою назвою вже існує!");
+                    return;
+                }
+                int groupIndex = stor.findGroup(newItemGroup);
+
+                if(!newItemName.equalsIgnoreCase(foundItem.getName())||
+                !newItemDescription.equalsIgnoreCase(foundItem.getDescription())||
+                !newItemProducer.equalsIgnoreCase(foundItem.getProducer()) ||
+                newItemAmount != foundItem.getAmount() || newItemPrice != foundItem.getPrice() ||
+                !newItemGroup.equalsIgnoreCase(foundItem.getGroupOfItems())) {
+
+                    try {
+                        stor.groups[groupIndex].editItem(itemName,
+                                new Item(newItemName, newItemDescription, newItemProducer, newItemAmount,
+                                        newItemPrice, newItemGroup));
+                        totalPrice.setText(String.format("Ціна всіх товарів: %.2f", +stor.getTotalPrice()));
+                        changed = true;
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame,"Жодного поля не було змінено!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(frame,"Поля не можуть бути пустими!");
+            }
+
+            if(changed){
+                JOptionPane.showMessageDialog(frame,"Товар було успішно змінено!");
+                frame.dispose();
+            }
+        });
     }
 
     private void addGroup(){
