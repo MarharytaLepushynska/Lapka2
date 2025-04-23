@@ -390,7 +390,74 @@ public class UserWindow extends JFrame {
     }
 
     private void removeGroup(){
+        JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
+        frame.setName("Видалення групи");
+        frame.setLayout(new BorderLayout());
+        frame.setSize(500, 200);
 
+        JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        title.setBackground(Color.decode("#cce6ff"));
+        JLabel lb = new JLabel("Видалення групи");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        title.add(lb);
+        frame.add(title, BorderLayout.NORTH);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        JLabel name = new JLabel("Назва:");
+        name.setFont(new Font("Verdana", Font.BOLD, 20));
+        panel.add(name);
+
+        JTextField naming = new JTextField();
+        naming.setPreferredSize(new Dimension(250, 40));
+        naming.setFont(new Font("Verdana", Font.PLAIN, 25));
+        panel.add(naming);
+
+        JPanel buttonPannel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPannel.setBackground(Color.decode("#cce6ff"));
+
+        JButton btn = new JButton("Видалити");
+        btn.setPreferredSize(new Dimension(250, 30));
+        btn.setFont(new Font("Verdana", Font.BOLD, 20));
+        buttonPannel.add(btn);
+
+        frame.add(buttonPannel, BorderLayout.SOUTH);
+        frame.add(panel, BorderLayout.CENTER);
+        frame.setVisible(true);
+
+        btn.addActionListener(e -> {
+            String groupNaming = naming.getText();
+
+            if(!groupNaming.trim().isEmpty()) {
+                boolean exists = false;
+                for (GroupOfItems group : stor.getGroups()) {
+                    if (groupNaming.equalsIgnoreCase(group.getName())) {
+                        exists = true;
+                        try {
+                            stor.removeGroup(group.getName());
+                            frame.setVisible(false);
+                            totalPrice.setText(String.format("Ціна всіх товарів: %.2f", + stor.getTotalPrice()));
+                            JOptionPane.showMessageDialog(frame, "Групу успішно видалено");
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        break;
+                    }
+                }
+                if (!exists) {
+                    JOptionPane.showMessageDialog(frame, "Групу не знайдено");
+                }
+            }else{
+                JOptionPane.showMessageDialog(frame, "Введіть коректне значення");
+            }
+        });
     }
 
     private void findItem(String item) {
