@@ -1242,7 +1242,11 @@ public class UserWindow extends JFrame {
 
             btn.addActionListener(e -> {
                 for(int i = 0; i < spiners.length; i++){
-                    gr.items[i].increaseAmount((Integer) spiners[i].getValue());
+                    try {
+                        gr.items[i].increaseAmount((Integer) spiners[i].getValue());
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
                 frame.setVisible(false);
                 totalPrice.setText(String.format("Ціна всіх товарів: %.2f", + stor.getTotalPrice()));
@@ -1292,7 +1296,11 @@ public class UserWindow extends JFrame {
 
         btn.addActionListener(e -> {
             for(int i = 0; i < spiners.length; i++){
-                gr.items[i].decreaseAmount((Integer) spiners[i].getValue());
+                try {
+                    gr.items[i].decreaseAmount((Integer) spiners[i].getValue());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
             frame.setVisible(false);
             totalPrice.setText(String.format("Ціна всіх товарів: %.2f", + stor.getTotalPrice()));

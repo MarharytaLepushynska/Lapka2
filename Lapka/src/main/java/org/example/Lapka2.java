@@ -45,13 +45,15 @@ class Item {
         this.groupOfItems = groupOfItems;
     }
 
-    public void increaseAmount(int number) {
+    public void increaseAmount(int number) throws IOException {
         amount += number;
+        FileData.editItem(name, new Item(name, description, producer, amount, price, groupOfItems));
     }
 
-    public void decreaseAmount(int number) {
+    public void decreaseAmount(int number) throws IOException {
         if (amount >= number) {
             amount -= number;
+            FileData.editItem(name, new Item(name, description, producer, amount, price, groupOfItems));
         }
     }
 
