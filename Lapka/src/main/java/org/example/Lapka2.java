@@ -311,7 +311,7 @@ class Storage {
         return str;
     }
 
-    public void editGroup(String groupName, String newGroupName) throws IOException {
+    public void editGroup(String groupName, String newGroupName, String newDescription) throws IOException {
         int indexOfItem = findGroup(groupName);
         if (indexOfItem == -1) {
             System.out.println("Group " + groupName + " not found");
@@ -320,7 +320,7 @@ class Storage {
         int index = Utils.getIndexOfEntity(groups, groups[indexOfItem]);
         groups[index].setGroupForItems(newGroupName);
         groups[index].setName(newGroupName);
-
+        groups[index].setDescription(newDescription);
     }
 
     public void addGroup(GroupOfItems newGroup) {

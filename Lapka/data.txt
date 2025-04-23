@@ -1,4 +1,4 @@
-{"name":"Гречка","description":"крупа","producer":"торчин","amount":2,"price":50.0,"groupOfItems":"Крупи","totalPrice":100.0}
-{"name":"Рис","description":"крупа","producer":"торчин","amount":2,"price":50.0,"groupOfItems":"Крупи","totalPrice":100.0}
-{"name":"Булгур","description":"крупа","producer":"торчин","amount":2,"price":50.0,"groupOfItems":"Крупи","totalPrice":100.0}
-{"name":"Манка","description":"крупа","producer":"торчин","amount":2,"price":50.0,"groupOfItems":"Крупи","totalPrice":100.0}
+{"name":"Гречка","description":"крупа","producer":"торчин","amount":2,"price":50.0,"groupOfItems":"Крупа","totalPrice":100.0}
+{"name":"Рис","description":"крупа","producer":"торчин","amount":2,"price":50.0,"groupOfItems":"Крупа","totalPrice":100.0}
+{"name":"Булгур","description":"крупа","producer":"торчин","amount":2,"price":50.0,"groupOfItems":"Крупа","totalPrice":100.0}
+{"name":"Манка","description":"крупа","producer":"торчин","amount":2,"price":50.0,"groupOfItems":"Крупа","totalPrice":100.0}

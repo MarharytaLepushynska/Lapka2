@@ -243,7 +243,150 @@ public class UserWindow extends JFrame {
     }
 
     private void editGroup(){
+        JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
+        frame.setName("Редагування групи");
+        frame.setLayout(new BorderLayout());
+        frame.setSize(500, 200);
 
+        JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        title.setBackground(Color.decode("#cce6ff"));
+        JLabel lb = new JLabel("Редагування групи");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        title.add(lb);
+        frame.add(title, BorderLayout.NORTH);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        JLabel name = new JLabel("Назва:");
+        name.setFont(new Font("Verdana", Font.BOLD, 20));
+        panel.add(name);
+
+        JTextField naming = new JTextField();
+        naming.setPreferredSize(new Dimension(250, 40));
+        naming.setFont(new Font("Verdana", Font.PLAIN, 25));
+        panel.add(naming);
+
+        JPanel buttonPannel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPannel.setBackground(Color.decode("#cce6ff"));
+
+        JButton btn = new JButton("Редагувати");
+        btn.setPreferredSize(new Dimension(250, 30));
+        btn.setFont(new Font("Verdana", Font.BOLD, 20));
+        buttonPannel.add(btn);
+
+        frame.add(buttonPannel, BorderLayout.SOUTH);
+        frame.add(panel, BorderLayout.CENTER);
+        frame.setVisible(true);
+
+        btn.addActionListener(e -> {
+            String groupName = naming.getText();
+            GroupOfItems gr = null;
+
+            if(groupName!=null && !groupName.trim().isEmpty() ) {
+                boolean exist = false;
+                for (GroupOfItems group : stor.getGroups()) {
+                    if (groupName.equalsIgnoreCase(group.getName())) {
+                        exist = true;
+                        gr = group;
+                        break;
+                    }
+                }
+
+                if (!exist) {
+                    JOptionPane.showMessageDialog(frame, "Такої групи не існує");
+                } else {
+                    frame.getContentPane().removeAll();
+                    JPanel titl = new JPanel(new FlowLayout(FlowLayout.CENTER));
+                    titl.setBackground(Color.decode("#cce6ff"));
+                    JLabel lbl = new JLabel("Редагування групи");
+                    lbl.setFont(new Font("Verdana", Font.BOLD, 20));
+                    titl.add(lbl);
+                    frame.add(titl, BorderLayout.NORTH);
+
+                    JPanel panel1 = new JPanel();
+                    panel1.setLayout(new GridLayout(2, 2));
+
+                    JLabel name1 = new JLabel("Назва:");
+                    name1.setFont(new Font("Verdana", Font.BOLD, 20));
+                    panel1.add(name1);
+
+                    JTextField nam = new JTextField();
+                    nam.setText(gr.getName());
+                    nam.setSize(250, 40);
+                    nam.setFont(new Font("Verdana", Font.PLAIN, 25));
+                    panel1.add(nam);
+
+                    JLabel desc = new JLabel("Опис:");
+                    desc.setFont(new Font("Verdana", Font.BOLD, 20));
+                    panel1.add(desc);
+
+                    JTextField descr = new JTextField();
+                    descr.setText(gr.getDescription());
+                    descr.setSize(250, 40);
+                    descr.setFont(new Font("Verdana", Font.PLAIN, 20));
+                    panel1.add(descr);
+
+                    JPanel btnPannel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+                    btnPannel.setBackground(Color.decode("#cce6ff"));
+
+                    JButton bton = new JButton("Редагувати");
+                    bton.setPreferredSize(new Dimension(250, 30));
+                    bton.setFont(new Font("Verdana", Font.BOLD, 20));
+                    btnPannel.add(bton);
+
+                    frame.add(btnPannel, BorderLayout.SOUTH);
+                    frame.add(panel1, BorderLayout.CENTER);
+                    frame.setVisible(true);
+                    frame.repaint();
+
+                    GroupOfItems finalGr = gr;
+                    bton.addActionListener(r -> {
+                        String groupNaming = nam.getText();
+                        String groupDescr = descr.getText();
+                        String currentname = finalGr.getName();
+
+                        if(!groupNaming.trim().isEmpty() && !groupDescr.trim().isEmpty()) {
+                            boolean exists = false;
+                            for (GroupOfItems group : stor.getGroups()) {
+                                if (groupNaming.equalsIgnoreCase(group.getName())) {
+                                    if(!groupNaming.equalsIgnoreCase(currentname)) {
+                                        exists = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!exists) {
+                                try {
+                                    stor.editGroup(currentname, groupNaming, groupDescr);
+                                } catch (IOException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                                frame.setVisible(false);
+                                JOptionPane.showMessageDialog(frame, "Групу успішно змінено");
+                            } else {
+                                JOptionPane.showMessageDialog(frame, "Така група вже існує");
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(frame, "Введіть коректні значення");
+                            naming.setText("");
+                            descr.setText("");
+                        }
+
+                    });
+                }
+            }else{
+                JOptionPane.showMessageDialog(frame, "Введіть коректні значення");
+                naming.setText("");
+            }
+
+        });
     }
 
     private void removeGroup(){
