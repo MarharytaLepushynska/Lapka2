@@ -213,9 +213,12 @@ class FileData {
 
     public static void addItem(Item item) throws IOException {
         String json = new ObjectMapper().writeValueAsString(item);
-        bw.write(json);
-        bw.newLine();
-        bw.flush();
+//        bw.write(json);
+//        bw.newLine();
+//        bw.flush();
+        FileOutputStream fileOutputStream = new FileOutputStream(file, true);
+        fileOutputStream.write((json + "\n").getBytes());
+        fileOutputStream.close();
     }
 
     public static void editItem(String itemName, Item newItem) throws IOException {

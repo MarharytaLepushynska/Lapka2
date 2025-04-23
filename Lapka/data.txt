@@ -1,8 +1,2 @@
-{"name":"Гречка","description":"крупа","producer":"торчин","amount":1,"price":50.0,"groupOfItems":"Крупи","totalPrice":50.0}
-{"name":"Рис","description":"крупа","producer":"торчин","amount":0,"price":50.0,"groupOfItems":"Крупи","totalPrice":0.0}
-{"name":"Булгур","description":"крупа","producer":"торчин","amount":0,"price":50.0,"groupOfItems":"Крупи","totalPrice":0.0}
-{"name":"Манка","description":"крупа","producer":"торчин","amount":0,"price":50.0,"groupOfItems":"Крупи","totalPrice":0.0}
-{"name":"Гречка","description":"крупа","producer":"торчин","amount":2,"price":50.0,"groupOfItems":"Крупи","totalPrice":100.0}
-{"name":"Рис","description":"крупа","producer":"торчин","amount":2,"price":50.0,"groupOfItems":"Крупи","totalPrice":100.0}
-{"name":"Булгур","description":"крупа","producer":"торчин","amount":2,"price":50.0,"groupOfItems":"Крупи","totalPrice":100.0}
-{"name":"Манка","description":"крупа","producer":"торчин","amount":2,"price":50.0,"groupOfItems":"Крупи","totalPrice":100.0}
+{"name":"Молоко","description":"....","producer":"....","amount":10,"price":45.5,"groupOfItems":"Молочка","totalPrice":455.0}
+{"name":"Яблуко","description":"...","producer":"...","amount":50,"price":45.0,"groupOfItems":"Фрукти","totalPrice":2250.0}

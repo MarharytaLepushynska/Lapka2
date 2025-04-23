@@ -571,7 +571,7 @@ public class UserWindow extends JFrame {
                     return;
                 }
                 int groupIndex = stor.findGroup(newItemGroup);
-
+                System.out.println(groupIndex);
                 if(!newItemName.equalsIgnoreCase(foundItem.getName())||
                 !newItemDescription.equalsIgnoreCase(foundItem.getDescription())||
                 !newItemProducer.equalsIgnoreCase(foundItem.getProducer()) ||
