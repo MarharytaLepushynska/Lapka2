@@ -70,7 +70,7 @@ public class UserWindow extends JFrame {
         storage.addItem("Інформація по групі");
         storage.addItem("Вартість по групі");
         northPanel.add(storage);
-        storage.addActionListener(e -> {int selected = storage.getSelectedIndex();
+        storage.addActionListener(e-> {int selected = storage.getSelectedIndex();
         switch (selected) {
             case 1:
                 increaceCount();
@@ -99,6 +99,20 @@ public class UserWindow extends JFrame {
         group.addItem("Редагувати групу");
         group.addItem("Видалити групу");
         northPanel.add(group);
+        group.addActionListener(e -> {int selected = group.getSelectedIndex();
+            switch (selected) {
+                case 1:
+                    addGroup();
+                    break;
+                case 2:
+                    editGroup();
+                    break;
+                case 3:
+                    removeGroup();
+                    break;
+                default:
+                    break;
+            }});
 
         JComboBox item = new JComboBox();
         item.setBorder(BorderFactory.createTitledBorder("Товар"));
@@ -143,6 +157,97 @@ public class UserWindow extends JFrame {
         });
 
         centerPanel.setVisible(true);
+    }
+
+    private void addGroup(){
+        JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
+        frame.setName("Додавання групи");
+        frame.setLayout(new BorderLayout());
+        frame.setSize(500, 200);
+
+        JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        title.setBackground(Color.decode("#cce6ff"));
+        JLabel lb = new JLabel("Додавання групи");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        title.add(lb);
+        frame.add(title, BorderLayout.NORTH);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 2));
+
+
+        JLabel name = new JLabel("Назва:");
+        name.setFont(new Font("Verdana", Font.BOLD, 20));
+        panel.add(name);
+
+        JTextField naming = new JTextField();
+        naming.setSize(250, 40);
+        naming.setFont(new Font("Verdana", Font.PLAIN, 25));
+        panel.add(naming);
+
+        JLabel desc = new JLabel("Опис:");
+        desc.setFont(new Font("Verdana", Font.BOLD, 20));
+        panel.add(desc);
+
+        JTextField descr = new JTextField();
+        naming.setSize(250, 40);
+        naming.setFont(new Font("Verdana", Font.PLAIN, 20));
+        panel.add(descr);
+
+        JPanel buttonPannel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPannel.setBackground(Color.decode("#cce6ff"));
+
+        JButton btn = new JButton("Додати");
+        btn.setPreferredSize(new Dimension(250, 30));
+        btn.setFont(new Font("Verdana", Font.BOLD, 20));
+        buttonPannel.add(btn);
+
+        frame.add(buttonPannel, BorderLayout.SOUTH);
+        frame.add(panel, BorderLayout.CENTER);
+        frame.setVisible(true);
+
+        btn.addActionListener(e -> {
+            String groupName = naming.getText();
+            String groupDescr = descr.getText();
+
+            if(groupName!=null && groupDescr!=null && !groupName.trim().isEmpty() && !groupDescr.trim().isEmpty()) {
+                boolean exist = false;
+                for (GroupOfItems group : stor.getGroups()) {
+                    if (groupName.equalsIgnoreCase(group.getName())) {
+                        exist = true;
+                        break;
+                    }
+                }
+
+                if (!exist) {
+                    GroupOfItems group = new GroupOfItems(groupName, groupDescr);
+                    stor.addGroup(group);
+                    frame.setVisible(false);
+                    JOptionPane.showMessageDialog(frame, "Групу успішно додано");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Така група вже існує");
+                }
+            }else{
+                JOptionPane.showMessageDialog(frame, "Введіть коректні значення");
+                naming.setText("");
+                descr.setText("");
+            }
+
+        });
+    }
+
+    private void editGroup(){
+
+    }
+
+    private void removeGroup(){
+
     }
 
     private void findItem(String item) {
