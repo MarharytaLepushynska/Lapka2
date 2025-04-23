@@ -1244,6 +1244,7 @@ public class UserWindow extends JFrame {
                 for(int i = 0; i < spiners.length; i++){
                     gr.items[i].increaseAmount((Integer) spiners[i].getValue());
                 }
+                frame.setVisible(false);
                 totalPrice.setText(String.format("Ціна всіх товарів: %.2f", + stor.getTotalPrice()));
             });
     }
@@ -1293,6 +1294,7 @@ public class UserWindow extends JFrame {
             for(int i = 0; i < spiners.length; i++){
                 gr.items[i].decreaseAmount((Integer) spiners[i].getValue());
             }
+            frame.setVisible(false);
             totalPrice.setText(String.format("Ціна всіх товарів: %.2f", + stor.getTotalPrice()));
         });
     }
