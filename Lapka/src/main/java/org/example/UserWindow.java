@@ -221,7 +221,7 @@ public class UserWindow extends JFrame {
                 number++;
                 JRadioButton rb = (JRadioButton) cmps;
                 if(rb.isSelected()){
-                    addItem(stor.groups[number].getName());
+                    addItem(stor.groups[number].getName(), frame);
                     select = true;
                     break;
                 }
@@ -282,7 +282,7 @@ public class UserWindow extends JFrame {
             if(!itemName.isEmpty()) {
                 Item foundItem = stor.findItem(itemName);
                 if(foundItem!=null){
-                    editChosenItem(foundItem, itemName);
+                    editChosenItem(foundItem, itemName,frame);
                 } else {
                     JOptionPane.showMessageDialog(frame,"Товар не було знайдено!");
                     search.setText("");
@@ -294,7 +294,7 @@ public class UserWindow extends JFrame {
         });
     }
 
-    private void addItem(String groupName){
+    private void addItem(String groupName, JFrame mainFrame){
         JFrame frame = new JFrame();
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -351,9 +351,12 @@ public class UserWindow extends JFrame {
         priceLabel.setFont(new Font("Verdana", Font.BOLD, 20));
         textPanel.add(priceLabel);
 
-        JSpinner priceField = new JSpinner(new SpinnerNumberModel(0, 0, 1000, 0.1));
+        JSpinner priceField = new JSpinner(new SpinnerNumberModel(0.1, 0.1, 1000, 0.1));
         priceField.setSize(250, 40);
         priceField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        JSpinner.DefaultEditor editor = new JSpinner.DefaultEditor(priceField);
+        editor.getTextField().setEditable(false);
+        priceField.setEditor(editor);
         textPanel.add(priceField);
 
         //item amount
@@ -364,6 +367,8 @@ public class UserWindow extends JFrame {
         JSpinner amountField = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
         amountField.setSize(250, 40);
         amountField.setFont(new Font("Verdana", Font.PLAIN, 25));
+        editor = new JSpinner.DefaultEditor(amountField);
+        amountField.setEditor(editor);
         textPanel.add(amountField);
 
         JLabel groupLabel = new JLabel("Група товарів:");
@@ -423,6 +428,8 @@ public class UserWindow extends JFrame {
                             itemAmount,itemPrice,itemGroup));
                     success = true;
                     totalPrice.setText(String.format("Ціна всіх товарів: %.2f", + stor.getTotalPrice()));
+                    mainFrame.dispose();
+                    frame.dispose();
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -443,7 +450,7 @@ public class UserWindow extends JFrame {
 
     }
 
-    private void editChosenItem(Item foundItem, String itemName){
+    private void editChosenItem(Item foundItem, String itemName, JFrame mainFrame){
         JFrame frame = new JFrame();
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -451,13 +458,13 @@ public class UserWindow extends JFrame {
                 frame.dispose();
             }
         });
-        frame.setName("Додавання товару");
+        frame.setName("Редагування товару");
         frame.setLayout(new BorderLayout());
         frame.setSize(700, 400);
 
         JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
         title.setBackground(Color.decode("#cce6ff"));
-        JLabel lb = new JLabel("Додавання товару");
+        JLabel lb = new JLabel("Редагування товару");
         lb.setFont(new Font("Verdana", Font.BOLD, 20));
         title.add(lb);
         frame.add(title, BorderLayout.NORTH);
@@ -503,10 +510,13 @@ public class UserWindow extends JFrame {
         priceLabel.setFont(new Font("Verdana", Font.BOLD, 20));
         textPanel.add(priceLabel);
 
-        JSpinner priceField = new JSpinner(new SpinnerNumberModel(0, 0, 1000, 0.1));
+        JSpinner priceField = new JSpinner(new SpinnerNumberModel(0.1, 0.1, 1000, 0.1));
         priceField.setSize(250, 40);
         priceField.setFont(new Font("Verdana", Font.PLAIN, 25));
         priceField.setValue(foundItem.getPrice());
+        JSpinner.DefaultEditor editor = new JSpinner.DefaultEditor(priceField);
+        editor.getTextField().setEditable(false);
+        priceField.setEditor(editor);
         textPanel.add(priceField);
 
         //item amount
@@ -518,20 +528,21 @@ public class UserWindow extends JFrame {
         amountField.setSize(250, 40);
         amountField.setFont(new Font("Verdana", Font.PLAIN, 25));
         amountField.setValue(foundItem.getAmount());
+        editor = new JSpinner.DefaultEditor(amountField);
+        amountField.setEditor(editor);
         textPanel.add(amountField);
 
         JLabel groupLabel = new JLabel("Група товарів:");
         groupLabel.setFont(new Font("Verdana", Font.BOLD, 20));
         textPanel.add(groupLabel);
 
-        JComboBox<String> groupField = new JComboBox<>();
+        JTextField groupField = new JTextField();
         groupField.setSize(250, 40);
         groupField.setFont(new Font("Verdana", Font.PLAIN, 25));
-        for (GroupOfItems group : stor.getGroups()) {
-            groupField.addItem(group.getName());
-        }
-        groupField.setSelectedItem(foundItem.getGroupOfItems());
+        groupField.setText(foundItem.getGroupOfItems());
+        groupField.setEditable(false);
         textPanel.add(groupField);
+
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Color.decode("#cce6ff"));
@@ -551,7 +562,7 @@ public class UserWindow extends JFrame {
             String newItemProducer = producerField.getText().trim();
             int newItemAmount = Integer.parseInt(String.valueOf(amountField.getValue()));
             double newItemPrice = Double.parseDouble(String.valueOf(priceField.getValue()));
-            String newItemGroup = (String) groupField.getSelectedItem();
+            String newItemGroup = foundItem.getGroupOfItems();
 
             boolean changed = false;
             boolean exists = false;
@@ -575,15 +586,16 @@ public class UserWindow extends JFrame {
                 if(!newItemName.equalsIgnoreCase(foundItem.getName())||
                 !newItemDescription.equalsIgnoreCase(foundItem.getDescription())||
                 !newItemProducer.equalsIgnoreCase(foundItem.getProducer()) ||
-                newItemAmount != foundItem.getAmount() || newItemPrice != foundItem.getPrice() ||
-                !newItemGroup.equalsIgnoreCase(foundItem.getGroupOfItems())) {
+                newItemAmount != foundItem.getAmount() || newItemPrice != foundItem.getPrice()) {
 
                     try {
-                        stor.groups[groupIndex].editItem(itemName,
+                        stor.groups[groupIndex].editItem(foundItem.getName(),
                                 new Item(newItemName, newItemDescription, newItemProducer, newItemAmount,
                                         newItemPrice, newItemGroup));
                         totalPrice.setText(String.format("Ціна всіх товарів: %.2f", +stor.getTotalPrice()));
                         changed = true;
+                        frame.dispose();
+                        mainFrame.dispose();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -596,7 +608,6 @@ public class UserWindow extends JFrame {
 
             if(changed){
                 JOptionPane.showMessageDialog(frame,"Товар було успішно змінено!");
-                frame.dispose();
             }
         });
     }
