@@ -131,6 +131,7 @@ public class UserWindow extends JFrame {
                 editingItem();
                 break;
             case 3:
+                deletingItem();
                 break;
             default:
                 break;
@@ -283,6 +284,75 @@ public class UserWindow extends JFrame {
                 Item foundItem = stor.findItem(itemName);
                 if(foundItem!=null){
                     editChosenItem(foundItem, itemName,frame);
+                } else {
+                    JOptionPane.showMessageDialog(frame,"Товар не було знайдено!");
+                    search.setText("");
+                }
+            } else {
+                JOptionPane.showMessageDialog(frame,"Спочатку введіть назву товару!");
+                search.setText("");
+            }
+        });
+    }
+
+    private void deletingItem(){
+        JFrame frame = new JFrame();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+            }
+        });
+        frame.setName("Видалення товару");
+        frame.setSize(600, 300);
+        frame.setLayout(new BorderLayout());
+
+        JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        title.setBackground(Color.decode("#cce6ff"));
+
+        JLabel lb = new JLabel("Введіть назву товару для видалення");
+        lb.setFont(new Font("Verdana", Font.BOLD, 20));
+        title.add(lb);
+        frame.add(title, BorderLayout.NORTH);
+
+        JPanel centerPanel = new JPanel(new GridLayout(3, 1));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 35, 50, 50));
+        centerPanel.add(Box.createVerticalStrut(40));
+
+        JTextField search = new JTextField();
+        search.setFont(new Font("Verdana", Font.PLAIN, 25));
+        centerPanel.add(search);
+
+        centerPanel.add(Box.createVerticalStrut(40));
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(Color.decode("#cce6ff"));
+
+        JButton button = new JButton("Видалити");
+        button.setPreferredSize(new Dimension(250, 30));
+        button.setFont(new Font("Verdana", Font.BOLD, 20));
+        buttonPanel.add(button);
+
+        frame.add(centerPanel, BorderLayout.CENTER);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+        frame.setVisible(true);
+
+        button.addActionListener(e -> {
+
+            String itemName = search.getText().trim();
+
+            if(!itemName.isEmpty()) {
+                Item foundItem = stor.findItem(itemName);
+                if(foundItem!=null){
+                    int groupIndex = stor.findGroup(foundItem.getGroupOfItems());
+                    try {
+                        stor.groups[groupIndex].removeItem(foundItem.getName());
+                        JOptionPane.showMessageDialog(frame,"Товар було успішно видалено!");
+                        totalPrice.setText(String.format("Ціна всіх товарів: %.2f", + stor.getTotalPrice()));
+                        frame.dispose();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame,"Товар не було знайдено!");
                     search.setText("");
